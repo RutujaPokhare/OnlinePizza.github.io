@@ -1,0 +1,77 @@
+{%extends "homepage.html" %}
+{%block content%} 
+<script type="text/javascript">
+    function getconfirm(myid)
+    {
+        result = confirm("Are you sure you want to delete(y/n)?");
+        if(result)
+        {
+            myform = document.getElementById(myid);
+            myform.action = "/removeitem"
+            myform.submit();
+        }
+    }
+
+    function increment(myid)
+    {
+        txtquantity = document.getElementById(myid);
+        if(txtquantity.value < 10)
+        {
+            txtquantity.value = parseInt(txtquantity.value)+1;
+        }
+    }
+
+    function decrement(myid)
+    {
+        txtquantity = document.getElementById(myid);
+        if(txtquantity.value > 1)
+        {
+            txtquantity.value = parseInt(txtquantity.value)-1;
+        }
+    }
+</script>
+<center>
+    <h1>Cart Details</h1>
+    <table class="table">
+        <tr><th>Pizza Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Size</th>
+            <th>Sub Total</th>
+
+        </tr>
+        {%for item in items%}
+        <form method="post" id="myform{{item.pizza.id}}">
+            {%csrf_token%}
+        <tr>
+            <td><input type="hidden" name="pizzaid" value="{{item.pizza.id}}"/>{{item.pizza.pname}}</td>
+            
+            <td>{{item.pizza.description}}</td>
+            <td>{{item.pizza.price}}</td>
+            
+            
+            <td><button class="btn btn-warning" type="button" onclick="decrement('quantity{{item.pizza.id}}')"> - </button>
+
+                <input type="text" name="quantity" id="quantity{{item.pizza.id}}" value="{{item.quantity}}" size="4"/>
+
+                <button class = "btn btn-warning" type="button" onclick="increment('quantity{{item.pizza.id}}')"> + </button>
+
+                <button class = "btn btn-danger" type="submit" name="action" value="update"> Update </button>
+
+            </td>
+            <td>{{item.pizza.size}}</td>
+            <td>{% widthratio item.quantity 1 item.pizza.price %}</td>
+            <td><button class="btn btn-danger" type="submit" name="action" value="remove" onclick="getconfirm('myform{{item.pizza.id}}')">Remove</button></td>
+
+        </tr>
+    </form>
+        {%endfor%}
+    </table>
+    
+    <hr>
+    <h3>Total : {{request.session.total}}</h3>
+    <hr>
+    <a href="/makepayment" class="btn btn-success">Proceed To Make Payment</a>
+</center>
+{%endblock%}

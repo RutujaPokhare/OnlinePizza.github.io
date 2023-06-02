@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+{% load static %} 
+<html lang="en">
+<head>
+  <title>PizzaBay</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!-- navbar section -->
+<style>
+.navbar {
+  margin-bottom: 0;
+  background-color:red;
+  z-index: 9999;
+  border: 0;
+  font-size: 12px !important;
+  line-height: 1.42857143 !important;
+  letter-spacing: 4px;
+  border-radius: 0;
+}
+
+.navbar li a, .navbar .navbar-brand {
+  color: rgb(31, 30, 30) !important;
+}
+
+.navbar-nav li a:hover, .navbar-nav li.active a {
+  color: #f4511e !important;
+  background-color:white!important;
+}
+
+.navbar-default .navbar-toggle {
+  
+  color:black!important;
+}
+.navbar-dropdown{
+    color: #f4511e;
+    background-color: black;
+}
+
+
+
+.jumbotron {
+            background-image: url('{% static "back4.jpg" %}');height:400;width: 100;
+      margin-bottom: 0;
+      font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+
+
+</style>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      {%if "uname" in request.session%} 
+      <a class="navbar-brand" href="#">Welcome {{request.session.uname}}</a>
+      {%else%} 
+      <a class="navbar-brand" href="#">PIZZABAY</a>
+      {%endif%} 
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/">HOME</a></li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">MENU
+          <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            {%for cat in cats%}
+            <li><a href="/showpizza/{{cat.id}}">{{cat.Category_name}}</a></li>
+            {%endfor%} 
+          </ul>
+        </li>
+        <li><a href="/contact">CONTACT US</a></li>
+        <ul class="nav navbar-nav navbar-right">
+          {%if "uname" in request.session%} 
+          <li><a href="/showcartitems"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+          <li><a href="/signout"><span class="glyphicon glyphicon-user"></span>SIGNOUT</a></li>
+          {%else%}
+          <li><a href="/login"><span class="glyphicon glyphicon-user"></span> LOGIN</a></li>
+          <li><a href="/signup"><span class="glyphicon glyphicon-user"></span>SIGNUP</a></li>
+          {%endif%}
+        </ul>
+         
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Carousel -->
+<div class="jumbotron">
+  <div class="container text-center">
+    <h1>PizzaBay</h1>      
+    <p>Fresh,Cheesy and Spicy!!</p>
+  </div>
+</div>
+<br>
+{% block content %}
+
+<!-- Products -->
+<div class="container">    
+  <div class="row">
+    {%for pizza in pizza%} 
+    <div class="col-sm-4">
+      <div class="panel panel-primary">
+        <div class="panel-heading">{{pizza.pname}}</div>
+        <div class="panel-body"><center><img src="{{pizza.image.url}}" class="img-responsive" 
+          style="width:250px;height:250px" alt="Image"></center></div>
+        <div class="panel-footer">
+          <p>Price :{{pizza.price}}</p>
+          <a href="\viewdetails/{{pizza.id}}">ViewDetails</a>
+          
+        </div>
+      </div>
+    
+    </div>
+    {%endfor%} 
+    
+  </div>  
+</div><br><br>
+{%endblock%}-
+<!-- footer section -->
+<footer class="container-fluid text-center">
+  <p>rutujapokhare@copyright</p>  
+  
+</footer>
+</body>
+</html>
